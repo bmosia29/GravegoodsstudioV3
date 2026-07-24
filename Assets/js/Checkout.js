@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const applePayBtn = document.querySelector('.apple-pay');
     const googlePayBtn = document.querySelector('.google-pay');
 
-    checkoutBtn.addEventListener('click', function(e) {
+    checkoutBtn.addEventListener('click', async function(e) {
         e.preventDefault();
         
         // Validate form
@@ -256,13 +256,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const originalText = this.innerHTML;
         this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
         this.disabled = true;
-        
-        // Simulate payment processing
-        setTimeout(() => {
-            alert('Order placed successfully! 🎉\n\nThank you for your purchase.\n\nOrder details have been sent to ' + formData.email);
-            
-            // Log order data (for development)
-            console.log('Order Data:', {
+        const btnRef = this;
+
+        // Save order details locally so we can show/confirm them after redirect back from Yoco
+        const totalRands = parseFloat(document.getElementById('totalValue').textContent);
+        const amountInCents = Math.round(totalRands * 100);
+
+        try {
+            // Store pending order info for the success page to use later
+            sessionStorage.setItem('pendingOrder', JSON.stringify({
                 customer: formData,
                 items: getCartData(),
                 totals: {
@@ -271,21 +273,39 @@ document.addEventListener('DOMContentLoaded', function() {
                     vat: document.getElementById('vatValue').textContent,
                     total: document.getElementById('totalValue').textContent
                 }
+            }));
+
+            const response = await fetch('http://localhost:3000/create-checkout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ amount: amountInCents })
             });
-            
-            // Clear cart from localStorage after successful order
-            clearCart();
-            
-            // Reset button
-            this.innerHTML = originalText;
-            this.disabled = false;
-            
-            // Redirect to home page
-            window.location.href = 'index.html';
-            
-            // In a real app, redirect to confirmation page
-            // window.location.href = 'order-confirmation.html';
-        }, 2000);
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to create checkout');
+            }
+
+            // Yoco returns a redirectUrl to their hosted payment page
+            if (data.redirectUrl) {
+                // Don't clear the cart yet — only clear it once payment succeeds
+                // (ideally confirmed via a webhook or on the success page)
+                window.location.href = data.redirectUrl;
+            } else {
+                throw new Error('No redirect URL returned from payment server');
+            }
+
+        } catch (error) {
+            console.error('Checkout error:', error);
+            alert('Something went wrong starting your payment. Please try again.\n\n' + error.message);
+
+            // Reset button so the user can retry
+            btnRef.innerHTML = originalText;
+            btnRef.disabled = false;
+        }
     });
 
     applePayBtn.addEventListener('click', function() {
@@ -409,4 +429,3 @@ window.addEventListener('beforeunload', function(e) {
         e.returnValue = '';
     }
 });
-

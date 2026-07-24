@@ -438,3 +438,19 @@ function initMobileMenu() {
     };
   }
 }
+
+async function payNow() {
+    const response = await fetch("http://localhost:3000/create-checkout", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            amount: 10000 // R100.00
+        })
+    });
+
+    const checkout = await response.json();
+
+    window.location.href = checkout.redirectUrl;
+}

@@ -254,3 +254,118 @@ if (typeof window !== 'undefined') {
         console.log('✅ Store initialized');
     });
 }
+
+async function checkoutWithYoco() {
+
+    try {
+
+        const subtotal = getCartSubtotal();
+
+        if (subtotal <= 0) {
+            showToast("Your cart is empty.", "error");
+            return;
+        }
+
+        const response = await fetch("http://localhost:3000/create-checkout", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+
+                // Yoco expects cents
+                amount: Math.round(subtotal * 100)
+
+            })
+
+        });
+
+        const data = await response.json();
+
+        console.log(data);
+
+        // We'll update this once we confirm the response format
+        if (data.redirectUrl) {
+
+            window.location.href = data.redirectUrl;
+
+        } else {
+
+            console.error(data);
+            showToast("Unable to start checkout.", "error");
+
+        }
+
+    } catch (err) {
+
+        console.error(err);
+
+        showToast("Payment error.", "error");
+
+    }
+
+}
+
+async function checkoutWithYoco() {
+
+    try {
+
+        const subtotal = getCartSubtotal();
+
+        if (subtotal <= 0) {
+
+            showToast("Your cart is empty.", "error");
+            return;
+
+        }
+
+        const response = await fetch(
+            "http://localhost:3000/create-checkout",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    amount: Math.round(subtotal * 100)
+
+                })
+
+            }
+        );
+
+        const data = await response.json();
+
+        console.log(data);
+
+        if (data.redirectUrl) {
+
+            window.location.href = data.redirectUrl;
+
+        } else if (data.redirect_url) {
+
+            window.location.href = data.redirect_url;
+
+        } else {
+
+            console.log(data);
+
+            showToast("Unable to create checkout.", "error");
+
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        showToast("Payment failed.", "error");
+
+    }
+
+}
