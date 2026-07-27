@@ -49,13 +49,15 @@ body {
 }
 
 .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
     font-size: 2rem;
     font-weight: 300;
     letter-spacing: 1px;
-    color: #CBF442;
+    color: #000000;
     text-decoration: none;
-    font-family: 'Brush Script MT', cursive;
-    font-style: italic;
+    font-family: 'UnifrakturCook', 'Brush Script MT', cursive;
     transition: transform 0.3s ease;
 }
 
@@ -63,16 +65,31 @@ body {
     transform: translateY(-2px);
 }
 
+/* Logo image: transparent background, no box/frame around it */
+.logo-img {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
+    background: transparent;
+    display: block;
+}
+
+.logo-text {
+    display: block;
+    line-height: 1;
+}
+
 .logo span {
     font-style: normal;
     font-weight: 400;
     display: block;
-    font-size: 0.5rem;
+    font-size: 1.0rem;
     letter-spacing: 4px;
-    margin-top: -5px;
+    margin-top: 4px;
     color: #000000;
-    font-family: 'Arial', sans-serif;
+    font-family: 'UnifrakturCook', 'Brush Script MT', cursive;
     text-transform: uppercase;
+    
 }
 
 .nav-menu {
@@ -330,34 +347,31 @@ body {
     margin-top: 80px;
 }
 
-.hero-slideshow {
+/* Video sits in the right half of the hero, full height, with
+   breathing room from the navbar above. object-fit: contain
+   guarantees the entire clip is always visible, never cropped -
+   the space around it just shows the hero's white background. */
+.hero-video-wrap {
     position: absolute;
     top: 0;
     right: 0;
     width: 50%;
     height: 100%;
     z-index: 1;
+    overflow: hidden;
 }
 
-.hero-slide {
-    position: absolute;
-    top: 0;
-    left: 0;
+.hero-video {
+    display: block;
     width: 100%;
     height: 100%;
-    opacity: 0;
-    transition: opacity 2s ease-in-out;
-    background-size: cover;
-    background-position: center;
-}
-
-.hero-slide.active {
-    opacity: 1;
+    object-fit: cover;
+    object-position: center;
 }
 
 .hero-content {
     position: relative;
-    z-index: 2;
+    z-index: 3;
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 3rem;
@@ -384,20 +398,21 @@ body {
     line-height: 1;
     font-family: 'Brush Script MT', cursive;
     font-style: italic;
-    color: #000000;
+    color: #a8cc1f;
     letter-spacing: 2px;
     margin-bottom: 0.5rem;
 }
 
+/* Gothic blackletter mixed in here for the brand's darker, alternative edge */
 .hero-title-bold {
-    font-size: clamp(3rem, 7vw, 6rem);
-    font-weight: 900;
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    font-weight: 700;
     display: block;
-    font-family: 'Impact', 'Arial Black', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    line-height: 0.9;
+    font-family: 'UnifrakturCook', 'Impact', 'Arial Black', sans-serif;
+    letter-spacing: 1px;
+    line-height: 0.95;
     margin-bottom: 0.5rem;
+    color: #000000;
 }
 
 .hero-subtitle-bottom {
@@ -428,22 +443,6 @@ body {
 .animate-fade-in-delay-3 {
     opacity: 0;
     animation: fadeInUp 1s ease-out 0.9s forwards;
-}
-
-/* Decorative Wave */
-.decorative-wave {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 50%;
-    height: 200px;
-    z-index: 3;
-    pointer-events: none;
-}
-
-.decorative-wave svg {
-    width: 100%;
-    height: 100%;
 }
 
 /* ========================================
@@ -1301,11 +1300,10 @@ body {
 }
 
 .footer-logo {
-    font-size: 2rem;
-    font-family: 'Brush Script MT', cursive;
-    font-style: italic;
+    font-size: 2.2rem;
+    font-family: 'UnifrakturCook', 'Brush Script MT', cursive;
     margin-bottom: 15px;
-    color: #fff;
+    color: #CBF442;
 }
 
 .footer-tagline {
@@ -1488,17 +1486,14 @@ body {
         margin-top: 70px;
     }
 
-    .hero-slideshow {
+    .hero-video-wrap {
         width: 100%;
-        opacity: 0.25;
+        opacity: 1;
+        padding: 20px;
     }
 
     .hero-content {
         padding: 0 2rem;
-    }
-
-    .decorative-wave {
-        display: none;
     }
 
     .featured-collection,
@@ -1550,8 +1545,10 @@ body {
     }
 
     .logo span {
-        font-size: 0.4rem;
+        font-size: 0.7rem;
         letter-spacing: 2px;
+        font-family: 'UnifrakturCook', 'Brush Script MT', cursive;
+
     }
 
     .hero-content {
@@ -1664,5 +1661,20 @@ body {
 
     .contact-logo {
         height: 280px;
+    }
+}
+
+/* ========================================
+   ACCESSIBILITY: respect reduced-motion
+======================================== */
+@media (prefers-reduced-motion: reduce) {
+    .hero-video {
+        display: none;
+    }
+
+    .hero-video-wrap {
+        background-image: url('images/HERO\ Section\ GGS\ Video.mp4');
+        background-size: cover;
+        background-position: center;
     }
 }

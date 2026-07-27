@@ -258,21 +258,33 @@
     </style>
 </head>
 <body>
-    <!-- Navbar (same as your homepage) -->
+   <!-- Navigation -->
     <nav class="navbar" id="navbar">
         <div class="nav-container">
             <a href="index.html" class="logo">
-                Graveyard Studios
-                <span>PIERCING AND ACCESSORIES STUDIO</span>
+                <span class="logo-mark">
+                    <img src="images/GraveGoods Logo Image.png" alt="Graveyard Studios" class="logo-img">
+                </span>
+                <span class="logo-text">
+                    Graveyard Studios
+                    
+                </span>
             </a>
             <ul class="nav-menu" id="navMenu">
                 <li><a href="index.html">HOME</a></li>
-                <li><a href="Product_page.html">PRODUCTS</a></li>
+                <li class="dropdown">
+                    <a href="Product_page.html" class="dropdown-toggle">PRODUCTS <span class="arrow">▼</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="Product_page.html">ALL PRODUCTS</a></li>
+                        <li><a href="Product_page.html">JEWELRY</a></li>
+                        <li><a href="Product_page.html">ACCESSORIES</a></li>
+                    </ul>
+                </li>
                 <li><a href="index.html#services">SERVICES</a></li>
                 <li><a href="index.html#contact">CONTACT</a></li>
             </ul>
             <div class="search-cart">
-                <i class="fa-solid fa-magnifying-glass"></i>
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
                 <div class="cart-icon" id="cartIcon">
                     <i class="fa-solid fa-cart-shopping"></i>
                     <span class="cart-count">0</span>

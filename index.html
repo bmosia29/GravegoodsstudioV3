@@ -4,16 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Graveyard Studios | Alternative Piercing & Accessories</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="Home.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-RXf+QSDCUQs6fEoS8nH3VvDOMkMt2rt7Nm5GJkP7FpC18JNpDutLCRa14Qdqg7Y4fefC0FqzJZzYxZP3GNn5Rw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer" />
 </head>
 <body>
     <!-- Navigation -->
     <nav class="navbar" id="navbar">
         <div class="nav-container">
             <a href="index.html" class="logo">
-                Graveyard Studios
-                <span>PIERCING AND ACCESSORIES STUDIO</span>
+                <span class="logo-mark">
+                    <img src="images/GraveGoods Logo Image.png" alt="Graveyard Studios" class="logo-img">
+                </span>
+                <span class="logo-text">
+                    Graveyard Studios
+                    
+                </span>
             </a>
             <ul class="nav-menu" id="navMenu">
                 <li><a href="index.html">HOME</a></li>
@@ -47,7 +55,11 @@
     <div class="search-modal" id="searchModal">
         <div class="search-modal-close" onclick="closeSearch()">&times;</div>
         <div class="search-modal-content">
-            <input type="text" id="searchInput" placeholder="Search products..." autofocus>
+            <div class="search-input-wrapper">
+                <i class="fa-solid fa-magnifying-glass search-input-icon"></i>
+                <input type="text" id="searchInput" placeholder="Search jewellery... (e.g. nose ring, belly bar, dermal)" autocomplete="off">
+            </div>
+            <p class="search-hint" id="searchHint">Start typing to search our jewellery collection</p>
             <div class="search-results" id="searchResults"></div>
         </div>
     </div>
@@ -56,10 +68,12 @@
 
     <!-- Hero Section -->
     <section class="hero" id="home">
-        <div class="hero-slideshow">
-            <div class="hero-slide active" style="background-image: url('Assets/images/Original-logo-for-GraveGoodsStudio.jpg');"></div>
-            <div class="hero-slide" style="background-image: url('Assets/images/Original-logo-for-GraveGoodsStudio.jpg');"></div>
-            <div class="hero-slide" style="background-image: url('Assets/images/Original-logo-for-GraveGoodsStudio.jpg');"></div>
+        <div class="hero-video-wrap">
+            <video class="hero-video" autoplay muted loop playsinline poster="Assets/images/Original-logo-for-GraveGoodsStudio.jpg">
+                <source src="images/HERO Section GGS Video.mp4" type="video/mp4">
+                <!-- Fallback for browsers/older devices that can't play the video -->
+                Your browser does not support the video tag.
+            </video>
         </div>
         <div class="hero-content">
             <div class="hero-text">
@@ -68,12 +82,6 @@
                 <div class="hero-title-bold animate-fade-in-delay-2">DARKNESS</div>
                 <div class="hero-subtitle-bottom animate-fade-in-delay-3">AND BEAUTY</div>
             </div>
-        </div>
-        <div class="decorative-wave">
-            <svg viewBox="0 0 1200 200" preserveAspectRatio="none">
-                <path d="M0,100 Q150,50 300,100 T600,100 T900,100 T1200,100 L1200,200 L0,200 Z" fill="white" opacity="0.7"/>
-                <path d="M0,120 Q200,70 400,120 T800,120 T1200,120 L1200,200 L0,200 Z" fill="white" opacity="0.5"/>
-            </svg>
         </div>
     </section>
 
@@ -95,7 +103,7 @@
             </div>
 
             <div class="fc-item">
-                <img src="Assets/images/product images/CURVEDBANANA BARBELL2.jpg" alt="Curved Barbell">
+                <img src="Assets/images/product images/CURVEDBANANA-BARBELL2.jpg" alt="Curved Barbell">
                 <h3 class="fc-name">CURVED BANANA BARBELL</h3>
                 <p class="fc-price">From R84.99</p>
             </div>
@@ -107,7 +115,7 @@
             </div>
 
             <div class="fc-item">
-                <img src="Assets/images/product images/Segment Ring4.jpg" alt="Segment Ring">
+                <img src="Assets/images/product images/Segment-Ring4.jpg" alt="Segment Ring">
                 <h3 class="fc-name">SEGMENT RING</h3>
                 <p class="fc-price">From R34.99</p>
             </div>
@@ -135,7 +143,7 @@
             <div class="services-grid">
                 <!-- Service 1 -->
                 <div class="service-card">
-                    <img src="images/Nipple Piercing img.png" alt="Piercing Service">
+                    <img src="images/Nipple-Piercing-img.png" alt="Piercing Service">
                     <h3>Professional Piercing</h3>
                     <p>Performed by certified artists with strict hygiene standards.</p>
                     <ul>
@@ -148,7 +156,7 @@
 
                 <!-- Service 2 -->
                 <div class="service-card">
-                    <img src="images/earpiercing img.png" alt="Jewelry Collection">
+                    <img src="images/earpiercing-img.png" alt="Jewelry Collection">
                     <h3>Premium Jewelry Collection</h3>
                     <p>Curated high-quality pieces designed for modern & alternative styles.</p>
                     <ul>
@@ -161,7 +169,7 @@
 
                 <!-- Service 3 -->
                 <div class="service-card">
-                    <img src="images/Piercing Gun img.png" alt="Jewelry Consultation">
+                    <img src="images/Piercing-Gun-img.png" alt="Jewelry Consultation">
                     <h3>Jewelry Consultation</h3>
                     <p>Select perfect pieces based on style, anatomy & healing stage.</p>
                     <ul>
@@ -350,7 +358,7 @@
             <!-- Left Column: Logo/Image -->
             <div class="contact-image-column">
                 <div class="contact-logo-wrapper">
-                    <img src="images/Original logo for GraveGoodsStudio.jpg" alt="Graveyard Studios Logo" class="contact-logo">
+                    <img src="images/Original-logo-for-GraveGoodsStudio.jpg" alt="Graveyard Studios Logo" class="contact-logo">
                     <div class="contact-overlay">
                         <h3>Let's Connect</h3>
                         <p>Ready to start your piercing journey or have questions about our jewelry?</p>
