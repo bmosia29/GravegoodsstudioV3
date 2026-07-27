@@ -941,8 +941,10 @@ body.search-open {
     }
 
     .logo span {
-        font-size: 0.4rem;
+        font-size: 0.7rem;
         letter-spacing: 2px;
+        font-family: 'UnifrakturCook', 'Brush Script MT', cursive;
+
     }
 
     .product-container {

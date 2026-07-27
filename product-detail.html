@@ -302,10 +302,16 @@
     <div class="search-modal" id="searchModal">
         <div class="search-modal-close" onclick="closeSearch()">&times;</div>
         <div class="search-modal-content">
-            <input type="text" id="searchInput" placeholder="Search products..." autofocus>
+            <div class="search-input-wrapper">
+                <i class="fa-solid fa-magnifying-glass search-input-icon"></i>
+                <input type="text" id="searchInput" placeholder="Search jewellery... (e.g. nose ring, belly bar, dermal)" autocomplete="off">
+            </div>
+            <p class="search-hint" id="searchHint">Start typing to search our jewellery collection</p>
             <div class="search-results" id="searchResults"></div>
         </div>
     </div>
+
+    
 
     <!-- Product Detail -->
     <div class="product-detail-page">
