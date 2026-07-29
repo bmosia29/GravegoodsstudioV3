@@ -275,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }));
 
-            const response = await fetch('http://localhost:3000/create-checkout', {
+            const response = await fetch('/api/create-checkout',  {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -293,7 +293,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.redirectUrl) {
                 // Don't clear the cart yet — only clear it once payment succeeds
                 // (ideally confirmed via a webhook or on the success page)
-                window.location.href = data.redirectUrl;
+                window.location.assign(data.redirectUrl);
             } else {
                 throw new Error('No redirect URL returned from payment server');
             }
