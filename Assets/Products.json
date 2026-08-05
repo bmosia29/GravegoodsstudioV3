@@ -1,5 +1,42 @@
 ﻿{
     "products":  [
+
+                    {
+  "id": "circular-horseshoe-barbell",
+  "name": "Circular Horseshoe Barbell",
+  "price": 5000.00,
+  "images": ["Assets/images/product images/CircularHorseshoeBarbell1.jpg"],
+  "category": "Barbell",
+  "description": "Circular horseshoe barbell.",
+  "stock": 10
+},
+{
+  "id": "curved-banana-barbell",
+  "name": "Curved Banana Barbell",
+  "price": 84.99,
+  "images": ["Assets/images/product images/CURVEDBANANA-BARBELL2.jpg"],
+  "category": "Barbell",
+  "description": "Curved banana barbell.",
+  "stock": 10
+},
+{
+  "id": "nose-straight",
+  "name": "Nose Straight",
+  "price": 45.99,
+  "images": ["Assets/images/product images/NoseStraight1.jpg"],
+  "category": "Nose",
+  "description": "Nose straight jewellery.",
+  "stock": 10
+},
+{
+  "id": "segment-ring",
+  "name": "Segment Ring",
+  "price": 34.99,
+  "images": ["Assets/images/product images/Segment-Ring4.jpg"],
+  "category": "Ring",
+  "description": "Segment ring.",
+  "stock": 10
+},
                      {
                          "id":  "2mm-dermal-top-anchor-set-crystal",
                          "name":  "2MM Dermal Top| Anchor Set | Crystal",

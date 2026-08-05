@@ -1,40 +1,32 @@
-/**
- * Home.js - Homepage functionality for Graveyard Studios
- * Rewritten to remove duplicate code that was double-binding
- * event listeners (this was the cause of the hamburger menu
- * appearing to do nothing: two click handlers were toggling
- * the same class in the same click, canceling each other out).
- */
-
 // ========================================
-// MOBILE MENU
+// MOBILE MENU FUNCTIONALITY
 // ========================================
 function initMobileMenu() {
     const menuToggle = document.getElementById('menuToggle');
     const navMenu = document.getElementById('navMenu');
 
-    if (!menuToggle || !navMenu) return;
-
-    menuToggle.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
-        menuToggle.classList.toggle('active');
-    });
-
-    // Close menu when a link inside it is clicked
-    navMenu.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-            navMenu.classList.remove('active');
-            menuToggle.classList.remove('active');
+    if (menuToggle && navMenu) {
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            menuToggle.classList.toggle('active');
         });
-    });
 
-    // Close menu when clicking outside it
-    document.addEventListener('click', (e) => {
-        if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
-            navMenu.classList.remove('active');
-            menuToggle.classList.remove('active');
-        }
-    });
+        // Close menu when clicking a link
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                menuToggle.classList.remove('active');
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+                navMenu.classList.remove('active');
+                menuToggle.classList.remove('active');
+            }
+        });
+    }
 }
 
 // ========================================
@@ -54,24 +46,44 @@ function initNavbarScroll() {
 }
 
 // ========================================
-// SMOOTH SCROLL FOR IN-PAGE NAV LINKS
+// HERO SLIDESHOW (homepage only - guarded)
+// ========================================
+function initHeroSlideshow() {
+    const slides = document.querySelectorAll('.hero-slide');
+    if (!slides.length) return; // not on this page, skip safely
+
+    let currentSlide = 0;
+
+    function nextSlide() {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add('active');
+    }
+
+    setInterval(nextSlide, 5000);
+}
+
+// ========================================
+// SMOOTH SCROLL FOR NAVIGATION
 // ========================================
 function initSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
-            const targetId = this.getAttribute('href');
-            const target = document.querySelector(targetId);
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
             if (target) {
-                e.preventDefault();
-                const offsetTop = target.offsetTop - 80; // account for fixed navbar
-                window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+                const offsetTop = target.offsetTop - 80; // Account for fixed navbar
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
             }
         });
     });
 }
 
 // ========================================
-// SCROLL-IN ANIMATIONS
+// INTERSECTION OBSERVER FOR SCROLL ANIMATIONS
 // ========================================
 function initScrollAnimations() {
     const observerOptions = {
@@ -102,7 +114,7 @@ function initScrollAnimations() {
 }
 
 // ========================================
-// ABOUT SECTION - CARD SLIDER
+// ABOUT SECTION - CARD SLIDER (homepage only - guarded)
 // ========================================
 function initAboutCardSlider() {
     const cards = {
@@ -112,17 +124,20 @@ function initAboutCardSlider() {
         infoCard3: document.getElementById('infoCard3')
     };
 
-    if (!cards.mainCard) return; // section not present on this page
+    if (!cards.mainCard) return; // not on this page, skip safely
 
     let currentCard = 'mainCard';
     let isAnimating = false;
 
     const infoButton = document.getElementById('infoButton');
     if (infoButton) {
-        infoButton.addEventListener('click', () => navigateToCard('infoCard1', 'right'));
+        infoButton.addEventListener('click', () => {
+            navigateToCard('infoCard1', 'right');
+        });
     }
 
-    document.querySelectorAll('.card-nav-btn').forEach(btn => {
+    const navButtons = document.querySelectorAll('.card-nav-btn');
+    navButtons.forEach(btn => {
         btn.addEventListener('click', function () {
             const targetCard = this.getAttribute('data-target');
             const direction = this.classList.contains('prev-btn') ? 'left' : 'right';
@@ -142,6 +157,7 @@ function initAboutCardSlider() {
 
         setTimeout(() => {
             targetCardEl.classList.add('active-card');
+
             setTimeout(() => {
                 currentCardEl.classList.remove('slide-out-left', 'slide-out-right');
                 currentCard = targetId;
@@ -155,10 +171,14 @@ function initAboutCardSlider() {
 
         if (e.key === 'ArrowLeft' && currentCard !== 'mainCard') {
             const prevCards = { infoCard1: 'mainCard', infoCard2: 'infoCard1', infoCard3: 'infoCard2' };
-            if (prevCards[currentCard]) navigateToCard(prevCards[currentCard], 'left');
+            if (prevCards[currentCard]) {
+                navigateToCard(prevCards[currentCard], 'left');
+            }
         } else if (e.key === 'ArrowRight' && currentCard !== 'infoCard3') {
             const nextCards = { mainCard: 'infoCard1', infoCard1: 'infoCard2', infoCard2: 'infoCard3' };
-            if (nextCards[currentCard]) navigateToCard(nextCards[currentCard], 'right');
+            if (nextCards[currentCard]) {
+                navigateToCard(nextCards[currentCard], 'right');
+            }
         } else if (e.key === 'Escape' && currentCard !== 'mainCard') {
             navigateToCard('mainCard', 'left');
         }
@@ -166,8 +186,8 @@ function initAboutCardSlider() {
 
     let touchStartX = 0;
     let touchEndX = 0;
-    const cardColumn = document.querySelector('.card-column');
 
+    const cardColumn = document.querySelector('.card-column');
     if (cardColumn) {
         cardColumn.addEventListener('touchstart', (e) => {
             touchStartX = e.changedTouches[0].screenX;
@@ -187,17 +207,26 @@ function initAboutCardSlider() {
         if (Math.abs(diff) > swipeThreshold) {
             if (diff > 0 && currentCard !== 'infoCard3') {
                 const nextCards = { mainCard: 'infoCard1', infoCard1: 'infoCard2', infoCard2: 'infoCard3' };
-                if (nextCards[currentCard]) navigateToCard(nextCards[currentCard], 'right');
+                if (nextCards[currentCard]) {
+                    navigateToCard(nextCards[currentCard], 'right');
+                }
             } else if (diff < 0 && currentCard !== 'mainCard') {
                 const prevCards = { infoCard1: 'mainCard', infoCard2: 'infoCard1', infoCard3: 'infoCard2' };
-                if (prevCards[currentCard]) navigateToCard(prevCards[currentCard], 'left');
+                if (prevCards[currentCard]) {
+                    navigateToCard(prevCards[currentCard], 'left');
+                }
             }
         }
     }
 
-    document.querySelectorAll('.heading-line').forEach((line) => {
-        line.addEventListener('mouseenter', function () { this.style.transform = 'translateX(8px)'; });
-        line.addEventListener('mouseleave', function () { this.style.transform = 'translateX(0)'; });
+    const headingLines = document.querySelectorAll('.heading-line');
+    headingLines.forEach((line) => {
+        line.addEventListener('mouseenter', function () {
+            this.style.transform = 'translateX(8px)';
+        });
+        line.addEventListener('mouseleave', function () {
+            this.style.transform = 'translateX(0)';
+        });
     });
 
     const cardColumnEl = document.querySelector('.card-column');
@@ -209,10 +238,13 @@ function initAboutCardSlider() {
             const rect = this.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
+
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
+
             const deltaX = (x - centerX) / centerX;
             const deltaY = (y - centerY) / centerY;
+
             const rotateX = deltaY * 5;
             const rotateY = deltaX * 5;
 
@@ -233,7 +265,7 @@ function initAboutCardSlider() {
 
     const circleButton = document.querySelector('.circle-button');
     if (circleButton) {
-        circleButton.addEventListener('click', function () {
+        circleButton.addEventListener('click', function (e) {
             const ripple = document.createElement('span');
             ripple.style.position = 'absolute';
             ripple.style.borderRadius = '50%';
@@ -244,8 +276,12 @@ function initAboutCardSlider() {
             ripple.style.left = '0';
             ripple.style.pointerEvents = 'none';
             ripple.style.animation = 'ripple 0.6s ease-out';
+
             this.appendChild(ripple);
-            setTimeout(() => ripple.remove(), 600);
+
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
         });
 
         circleButton.addEventListener('keydown', function (e) {
@@ -267,25 +303,38 @@ function initAboutCardSlider() {
 }
 
 // ========================================
-// FEATURED COLLECTION + SERVICE CARD HOVER FX
+// FEATURED COLLECTION - HOVER Z-INDEX (homepage only - guarded by empty NodeList)
 // ========================================
-function initHoverEffects() {
+function initFeaturedHoverEffect() {
     document.querySelectorAll('.fc-item').forEach(item => {
-        item.addEventListener('mouseenter', function () { this.style.zIndex = '10'; });
-        item.addEventListener('mouseleave', function () { this.style.zIndex = '1'; });
+        item.addEventListener('mouseenter', function () {
+            this.style.zIndex = '10';
+        });
+        item.addEventListener('mouseleave', function () {
+            this.style.zIndex = '1';
+        });
     });
+}
 
+// ========================================
+// SERVICE CARDS - TILT EFFECT (homepage only - guarded)
+// ========================================
+function initServiceCardTilt() {
     document.querySelectorAll('.service-card').forEach(card => {
         card.addEventListener('mousemove', function (e) {
-            if (window.innerWidth <= 768) return;
             const rect = this.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
+
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
+
             const rotateX = (y - centerY) / 10;
             const rotateY = (centerX - x) / 10;
-            this.style.transform = `translateY(-10px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+            if (window.innerWidth > 768) {
+                this.style.transform = `translateY(-10px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            }
         });
 
         card.addEventListener('mouseleave', function () {
@@ -297,7 +346,7 @@ function initHoverEffects() {
 }
 
 // ========================================
-// RESPONSIVE FLOATING CARD ON RESIZE
+// WINDOW RESIZE HANDLER
 // ========================================
 function initResizeHandler() {
     let resizeTimer;
@@ -305,16 +354,20 @@ function initResizeHandler() {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function () {
             const floatingCard = document.querySelector('.floating-card');
-            if (!floatingCard) return;
-            floatingCard.style.transform = window.innerWidth <= 900 ? 'rotate(0deg)' : 'rotate(3deg)';
+
+            if (window.innerWidth <= 900 && floatingCard) {
+                floatingCard.style.transform = 'rotate(0deg)';
+            } else if (floatingCard) {
+                floatingCard.style.transform = 'rotate(3deg)';
+            }
         }, 250);
     });
 }
 
 // ========================================
-// REDUCED MOTION
+// PERFORMANCE OPTIMIZATION - REDUCED MOTION
 // ========================================
-function respectReducedMotion() {
+function initReducedMotion() {
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (reducedMotion.matches) {
         document.querySelectorAll('*').forEach(el => {
@@ -325,27 +378,73 @@ function respectReducedMotion() {
 }
 
 // ========================================
-// LAZY LOAD IMAGES
+// LAZY LOADING FOR IMAGES
 // ========================================
-function initLazyImages() {
-    if (!('IntersectionObserver' in window)) return;
-
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                img.src = img.dataset.src || img.src;
-                img.classList.add('loaded');
-                observer.unobserve(img);
-            }
+function initLazyLoadImages() {
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src || img.src;
+                    img.classList.add('loaded');
+                    observer.unobserve(img);
+                }
+            });
         });
-    });
 
-    document.querySelectorAll('img').forEach(img => imageObserver.observe(img));
+        document.querySelectorAll('img').forEach(img => {
+            imageObserver.observe(img);
+        });
+    }
 }
 
 // ========================================
-// PRODUCT SEARCH (hooks into store.js's loadProducts())
+// CONTACT FORM HANDLING (homepage only - guarded)
+// ========================================
+function initContactForm() {
+    const contactForm = document.getElementById('contactForm');
+    if (!contactForm) return;
+
+    contactForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = {
+            firstName: document.getElementById('firstName').value,
+            lastName: document.getElementById('lastName').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            subject: document.getElementById('subject').value,
+            message: document.getElementById('message').value
+        };
+
+        const submitBtn = contactForm.querySelector('.contact-submit-btn');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = 'Sending...';
+        submitBtn.disabled = true;
+
+        setTimeout(() => {
+            alert('Thank you for contacting us! We\'ll get back to you soon.');
+            contactForm.reset();
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+            console.log('Form submitted:', formData);
+        }, 1500);
+    });
+
+    const formInputs = contactForm.querySelectorAll('input, select, textarea');
+    formInputs.forEach(input => {
+        input.addEventListener('focus', function () {
+            this.parentElement.style.transform = 'translateY(-2px)';
+        });
+        input.addEventListener('blur', function () {
+            this.parentElement.style.transform = 'translateY(0)';
+        });
+    });
+}
+
+// ========================================
+// SEARCH
 // ========================================
 function initSearch() {
     const searchIcon = document.querySelector('.search-icon');
@@ -390,8 +489,8 @@ function initSearch() {
     }
 
     document.addEventListener('click', (e) => {
-        if (searchModal && searchModal.classList.contains('active') &&
-            !searchModal.contains(e.target) && !e.target.closest('.search-icon')) {
+        const modal = document.getElementById('searchModal');
+        if (modal && modal.classList.contains('active') && !modal.contains(e.target) && !e.target.closest('.search-icon')) {
             closeSearch();
         }
     });
@@ -401,14 +500,14 @@ function closeSearch() {
     const searchModal = document.getElementById('searchModal');
     if (!searchModal) return;
     searchModal.classList.remove('active');
-    const input = document.getElementById('searchInput');
-    const results = document.getElementById('searchResults');
-    if (input) input.value = '';
-    if (results) results.innerHTML = '';
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    if (searchInput) searchInput.value = '';
+    if (searchResults) searchResults.innerHTML = '';
 }
 
 // ========================================
-// CART UI (hooks into store.js's getCart()/getCartCount()/etc.)
+// CART UI (shared across all pages - toggles the preview dropdown)
 // ========================================
 function initCart() {
     updateCartBadge();
@@ -418,19 +517,21 @@ function initCart() {
     const cartPreview = document.getElementById('cartPreview');
     const closePreview = document.getElementById('closePreview');
 
-    if (cartIcon) {
+    if (cartIcon && cartPreview) {
         cartIcon.addEventListener('click', (e) => {
             e.stopPropagation();
-            window.location.href = 'Checkout.html';
+            cartPreview.classList.toggle('show');
         });
     }
 
     if (closePreview && cartPreview) {
-        closePreview.addEventListener('click', () => cartPreview.classList.remove('show'));
+        closePreview.addEventListener('click', () => {
+            cartPreview.classList.remove('show');
+        });
     }
 
     document.addEventListener('click', (e) => {
-        if (cartPreview && cartIcon && !cartPreview.contains(e.target) && !cartIcon.contains(e.target)) {
+        if (cartPreview && !cartPreview.contains(e.target) && cartIcon && !cartIcon.contains(e.target)) {
             cartPreview.classList.remove('show');
         }
     });
@@ -443,18 +544,19 @@ function initCart() {
 
 function updateCartBadge() {
     const cartCount = document.querySelector('.cart-count');
-    if (!cartCount || typeof getCartCount !== 'function') return;
     const count = getCartCount();
-    cartCount.textContent = count;
-    cartCount.style.display = count > 0 ? 'flex' : 'none';
+    if (cartCount) {
+        cartCount.textContent = count;
+        cartCount.style.display = count > 0 ? 'flex' : 'none';
+    }
 }
 
 function updateCartPreview() {
     const cartPreviewItems = document.getElementById('cartPreviewItems');
     const cartSubtotal = document.getElementById('cartSubtotal');
-    if (!cartPreviewItems || typeof getCart !== 'function') return;
-
     const cart = getCart();
+
+    if (!cartPreviewItems) return;
 
     if (cart.length === 0) {
         cartPreviewItems.innerHTML = `
@@ -481,133 +583,39 @@ function updateCartPreview() {
         </div>
     `).join('');
 
-    if (cartSubtotal && typeof getCartSubtotal === 'function' && typeof formatPrice === 'function') {
+    if (cartSubtotal) {
         cartSubtotal.textContent = formatPrice(getCartSubtotal());
     }
 
     document.querySelectorAll('.remove-item').forEach(btn => {
-        btn.addEventListener('click', () => removeFromCart(parseInt(btn.dataset.index)));
-    });
-}
-
-// ========================================
-// FEATURED PRODUCTS -> product-detail.html LINKS
-// ========================================
-function makeProductsClickable() {
-    const productCards = document.querySelectorAll('.fc-item');
-    const slugs = [
-        'circular-horseshoe-barbell',
-        'curved-banana-barbell',
-        'nose-straight-stud',
-        'segment-ring'
-    ];
-
-    productCards.forEach((card, index) => {
-        card.style.cursor = 'pointer';
-        card.addEventListener('click', () => {
-            window.location.href = `product-detail.html?id=${slugs[index]}`;
+        btn.addEventListener('click', () => {
+            removeFromCart(parseInt(btn.dataset.index));
         });
-    });
-}
-
-// ========================================
-// CONTACT FORM -> Google Drive (via Apps Script Web App)
-// ========================================
-function initContactForm() {
-    const contactForm = document.getElementById('contactForm');
-    if (!contactForm) return;
-
-    // Paste the Web App URL you get from deploying the Apps Script
-    // (see the setup instructions provided separately) here:
-    const GOOGLE_SCRIPT_URL = 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
-
-    contactForm.addEventListener('submit', async function (e) {
-        e.preventDefault();
-
-        const formData = {
-            firstName: document.getElementById('firstName').value,
-            lastName: document.getElementById('lastName').value,
-            email: document.getElementById('email').value,
-            phone: document.getElementById('phone').value,
-            subject: document.getElementById('subject').value,
-            message: document.getElementById('message').value
-        };
-
-        const submitBtn = contactForm.querySelector('.contact-submit-btn');
-        const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = 'Sending...';
-        submitBtn.disabled = true;
-
-        try {
-            if (GOOGLE_SCRIPT_URL.startsWith('PASTE_')) {
-                // Not configured yet - fall back to a console log so the
-                // page still "works" during development.
-                console.warn('Google Apps Script URL not set - form was not actually sent.');
-                console.log('Form data:', formData);
-            } else {
-                // Apps Script web apps require no-cors mode from the browser;
-                // we can't read the response, but the request still goes through
-                // and appends a row to the linked Google Sheet in Drive.
-                await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
-                });
-            }
-
-            alert('Thank you for contacting us! We\'ll get back to you soon.');
-            contactForm.reset();
-        } catch (error) {
-            console.error('Contact form submission error:', error);
-            alert('Something went wrong sending your message. Please try again or email us directly.');
-        } finally {
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-        }
-    });
-
-    contactForm.querySelectorAll('input, select, textarea').forEach(input => {
-        input.addEventListener('focus', function () { this.parentElement.style.transform = 'translateY(-2px)'; });
-        input.addEventListener('blur', function () { this.parentElement.style.transform = 'translateY(0)'; });
     });
 }
 
 // ========================================
 // CONSOLE BRANDING
 // ========================================
-function printConsoleBranding() {
-    console.log('%cGraveyard Studios', 'font-size: 24px; font-weight: bold; color: #000;');
-    console.log('%cPiercing & Accessories Studio', 'font-size: 14px; color: #666;');
-}
+console.log('%cGraveyard Studios', 'font-size: 24px; font-weight: bold; color: #000;');
+console.log('%cPiercing & Accessories Studio', 'font-size: 14px; color: #666;');
 
 // ========================================
-// INIT - each function runs exactly once
+// INITIALIZE EVERYTHING
 // ========================================
 document.addEventListener('DOMContentLoaded', () => {
     initMobileMenu();
     initNavbarScroll();
+    initHeroSlideshow();
     initSmoothScroll();
     initScrollAnimations();
     initAboutCardSlider();
-    initHoverEffects();
+    initFeaturedHoverEffect();
+    initServiceCardTilt();
     initResizeHandler();
-    respectReducedMotion();
-    initLazyImages();
+    initReducedMotion();
+    initLazyLoadImages();
+    initContactForm();
     initSearch();
     initCart();
-    makeProductsClickable();
-    initContactForm();
-    printConsoleBranding();
 });
-
-async function payNow() {
-    const response = await fetch('http://localhost:3000/create-checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: 10000 }) // R100.00
-    });
-
-    const checkout = await response.json();
-    window.location.href = checkout.redirectUrl;
-}
