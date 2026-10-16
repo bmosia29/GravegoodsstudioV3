@@ -467,7 +467,7 @@ body {
 }
 
 .fc-script {
-    font-family: 'Brush Script MT', cursive;
+    font-family: 'UnifrakturCook', 'Impact', 'Arial Black', sans-serif;
     font-weight: 400;
     font-style: italic;
     font-size: clamp(2.5rem, 5vw, 3.5rem);
@@ -629,7 +629,7 @@ body {
 }
 
 .services-title span {
-    font-family: 'Brush Script MT', cursive;
+    font-family: 'UnifrakturCook', 'Impact', 'Arial Black', sans-serif;
     font-style: italic;
     font-weight: 400;
     text-transform: none;
@@ -784,7 +784,7 @@ body {
 }
 
 .word-part-2 {
-    font-family: 'Brush Script MT', cursive;
+    font-family: 'UnifrakturCook', 'Impact', 'Arial Black', sans-serif;
     color: #000000;
     font-weight: 400;
     font-style: italic;
@@ -1168,7 +1168,7 @@ body {
 }
 
 .contact-script {
-    font-family: 'Brush Script MT', cursive;
+    font-family: 'UnifrakturCook', 'Impact', 'Arial Black', sans-serif;
     font-size: clamp(2.5rem, 5vw, 3.5rem);
     font-style: italic;
     margin-right: 10px;

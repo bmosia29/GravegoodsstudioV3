@@ -90,12 +90,6 @@ function escapeHtml(str) {
 // ========================================
 // COMBINED FILTERING (navbar category dropdown
 // + sidebar material checkboxes)
-// Filters the on-page product grid using
-// data-category and data-materials attributes
-// set on each product card. Both filters apply
-// together (AND logic): a product must match the
-// selected category AND at least one selected
-// material (if any materials are checked).
 // ========================================
 
 const CATEGORY_LABELS = {
@@ -138,7 +132,7 @@ function filterCategory(category) {
     applyFilters();
 
     // Scroll to the top of the product grid so the change is obvious
-    document.querySelector('.product-header').scrollIntoView({ behavior: 'smooth' });
+    document.querySelector('.product-header')?.scrollIntoView({ behavior: 'smooth' });
 
     // Close the mobile nav menu if it's open
     const navMenu = document.getElementById('navMenu');
@@ -151,6 +145,8 @@ function filterCategory(category) {
 
 function applyFilters() {
     const container = document.getElementById('productContainer');
+    if (!container) return;
+
     const cards = container.querySelectorAll('.product-link');
     const bar = document.getElementById('categoryBar');
     const barText = document.getElementById('categoryBarText');
@@ -164,10 +160,11 @@ function applyFilters() {
     let visibleCount = 0;
 
     cards.forEach(card => {
-        const cardCategory = card.getAttribute('data-category');
-        const cardMaterials = (card.getAttribute('data-materials') || '').split(' ');
+        const cardCategory = (card.getAttribute('data-category') || '').trim().toLowerCase();
+        const activeCategory = currentCategory.trim().toLowerCase();
+        const cardMaterials = (card.getAttribute('data-materials') || '').toLowerCase().split(/\s+/).filter(Boolean);
 
-        const categoryMatch = currentCategory === 'all' || cardCategory === currentCategory;
+        const categoryMatch = activeCategory === 'all' || cardCategory === activeCategory;
         const materialMatch = selectedMaterials.size === 0 ||
             cardMaterials.some(m => selectedMaterials.has(m));
 
@@ -181,22 +178,24 @@ function applyFilters() {
         ? Array.from(selectedMaterials).map(m => m[0].toUpperCase() + m.slice(1)).join(', ')
         : '';
 
-    if (currentCategory === 'all' && selectedMaterials.size === 0) {
-        bar.classList.remove('active');
-        title.textContent = 'ALL PRODUCTS';
-        subtitle.textContent = 'Explore our full collection of piercing jewellery';
-    } else {
-        bar.classList.add('active');
-        const parts = [];
-        if (currentCategory !== 'all') parts.push(CATEGORY_LABELS[currentCategory]);
-        if (materialLabel) parts.push(materialLabel);
-        barText.textContent = 'Showing: ' + parts.join(' — ');
-        title.textContent = currentCategory !== 'all'
-            ? CATEGORY_LABELS[currentCategory].toUpperCase()
-            : 'ALL PRODUCTS';
-        subtitle.textContent = 'Browse our ' +
-            (currentCategory !== 'all' ? CATEGORY_LABELS[currentCategory].toLowerCase() : 'full')
-            + ' collection' + (materialLabel ? ' in ' + materialLabel.toLowerCase() : '');
+    if (bar && barText && title && subtitle) {
+        if (currentCategory === 'all' && selectedMaterials.size === 0) {
+            bar.classList.remove('active');
+            title.textContent = 'ALL PRODUCTS';
+            subtitle.textContent = 'Explore our full collection of piercing jewellery';
+        } else {
+            bar.classList.add('active');
+            const parts = [];
+            if (currentCategory !== 'all') parts.push(CATEGORY_LABELS[currentCategory] || currentCategory);
+            if (materialLabel) parts.push(materialLabel);
+            barText.textContent = 'Showing: ' + parts.join(' — ');
+            title.textContent = currentCategory !== 'all'
+                ? (CATEGORY_LABELS[currentCategory] || currentCategory).toUpperCase()
+                : 'ALL PRODUCTS';
+            subtitle.textContent = 'Browse our ' +
+                (currentCategory !== 'all' ? (CATEGORY_LABELS[currentCategory] || currentCategory).toLowerCase() : 'full')
+                + ' collection' + (materialLabel ? ' in ' + materialLabel.toLowerCase() : '');
+        }
     }
 
     if (visibleCount === 0) {
@@ -213,23 +212,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const input = document.getElementById('searchInput');
     const modal = document.getElementById('searchModal');
 
-    input.addEventListener('input', (e) => renderResults(e.target.value));
+    if (input) {
+        input.addEventListener('input', (e) => renderResults(e.target.value));
+    }
 
     // Close on Escape
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
+        if (e.key === 'Escape' && modal && modal.classList.contains('active')) {
             closeSearch();
         }
     });
 
     // Close when clicking the backdrop (outside the content box)
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeSearch();
-    });
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeSearch();
+        });
+    }
 
-    // Optional: press "/" anywhere to open search (like many storefronts)
+    // Optional: press "/" anywhere to open search
     document.addEventListener('keydown', (e) => {
-        if (e.key === '/' && !modal.classList.contains('active') &&
+        if (e.key === '/' && modal && !modal.classList.contains('active') &&
             document.activeElement.tagName !== 'INPUT') {
             e.preventDefault();
             openSearch();

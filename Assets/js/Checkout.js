@@ -3,6 +3,9 @@
 // Graveyard Studios
 // ========================================
 
+// Paste your deployed Google Apps Script Web App URL here:
+const GOOGLE_SHEET_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwlNaoUv5Y5Ij4I88AJGGbYGyepmWE-CncZHe8PNUd8r_5qxiNsHBa1VKpdIM4dWmnC7g/exec";
+
 document.addEventListener('DOMContentLoaded', function() {
     
     const deliveryFee = 50.00;
@@ -13,19 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // ========================================
     function loadCartItemsFromStorage() {
         const cartItemsContainer = document.getElementById('cartItems');
-        const cart = getCart();
+        const cart = typeof getCart === 'function' ? getCart() : JSON.parse(localStorage.getItem('cart') || '[]');
         
         if (!cart || cart.length === 0) {
-            cartItemsContainer.innerHTML = `
-                <div style="text-align: center; padding: 60px 20px;">
-                    <i class="fas fa-shopping-bag" style="font-size: 4rem; color: #ddd; margin-bottom: 20px;"></i>
-                    <h3 style="font-size: 1.5rem; margin-bottom: 10px;">Your cart is empty</h3>
-                    <p style="color: #666; margin-bottom: 25px;">Add some items to get started!</p>
-                    <a href="index.html" style="display: inline-block; padding: 12px 30px; background: #000; color: #fff; text-decoration: none; border-radius: 50px; font-weight: 700; transition: all 0.3s ease;">
-                        Continue Shopping
-                    </a>
-                </div>
-            `;
+            showEmptyCart();
             return;
         }
         
@@ -33,11 +27,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const itemsHTML = cart.map((item, index) => `
             <div class="cart-item" data-price="${item.price}" data-id="${index}">
                 <div class="item-image">
-                    <img src="${item.image}" alt="${item.name}">
+                    <img src="${item.image || ''}" alt="${item.name}">
                 </div>
                 <div class="item-details">
                     <h3 class="item-name">${item.name}</h3>
-                    <p class="item-variation">${item.selectedColour}${item.selectedColour && item.measurement ? ' • ' : ''}${item.measurement}</p>
+                    <p class="item-variation">${item.selectedColour || ''}${item.selectedColour && item.measurement ? ' • ' : ''}${item.measurement || ''}</p>
                     <div class="item-actions">
                         <div class="quantity-selector">
                             <button class="qty-btn minus" data-id="${index}">-</button>
@@ -72,14 +66,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const cartItems = document.querySelectorAll('.cart-item');
         
         cartItems.forEach(item => {
-            const price = parseFloat(item.getAttribute('data-price'));
+            const price = parseFloat(item.getAttribute('data-price')) || 0;
             const qtyInput = item.querySelector('.qty-input');
-            const quantity = parseInt(qtyInput.value);
+            const quantity = parseInt(qtyInput.value) || 1;
             const itemTotal = price * quantity;
             
             // Update individual item total
             const itemTotalEl = item.querySelector('.item-total');
-            itemTotalEl.textContent = itemTotal.toFixed(2);
+            if (itemTotalEl) itemTotalEl.textContent = itemTotal.toFixed(2);
             
             // Add to subtotal
             subtotal += itemTotal;
@@ -90,29 +84,33 @@ document.addEventListener('DOMContentLoaded', function() {
         const total = subtotal + deliveryFee + vat;
         
         // Update summary display
-        document.getElementById('subtotalValue').textContent = subtotal.toFixed(2);
-        document.getElementById('vatValue').textContent = vat.toFixed(2);
-        document.getElementById('totalValue').textContent = total.toFixed(2);
+        const subtotalEl = document.getElementById('subtotalValue');
+        const vatEl = document.getElementById('vatValue');
+        const totalEl = document.getElementById('totalValue');
+
+        if (subtotalEl) subtotalEl.textContent = subtotal.toFixed(2);
+        if (vatEl) vatEl.textContent = vat.toFixed(2);
+        if (totalEl) totalEl.textContent = total.toFixed(2);
     }
 
     // ========================================
     // QUANTITY CONTROLS
     // ========================================
     
-    // Helper function to bind quantity controls
     function bindQuantityControls() {
         // Plus buttons
         const plusButtons = document.querySelectorAll('.qty-btn.plus');
         plusButtons.forEach(btn => {
             btn.addEventListener('click', function() {
                 const cartIndex = parseInt(this.getAttribute('data-id'));
-                const cart = getCart();
+                const cart = typeof getCart === 'function' ? getCart() : JSON.parse(localStorage.getItem('cart') || '[]');
                 if (cart[cartIndex]) {
                     cart[cartIndex].quantity += 1;
-                    setCart(cart);
+                    saveCart(cart);
                     loadCartItemsFromStorage();
                     calculateTotals();
                     bindQuantityControls();
+                    bindRemoveButtons();
                     animateButton(this);
                 }
             });
@@ -123,13 +121,14 @@ document.addEventListener('DOMContentLoaded', function() {
         minusButtons.forEach(btn => {
             btn.addEventListener('click', function() {
                 const cartIndex = parseInt(this.getAttribute('data-id'));
-                const cart = getCart();
+                const cart = typeof getCart === 'function' ? getCart() : JSON.parse(localStorage.getItem('cart') || '[]');
                 if (cart[cartIndex] && cart[cartIndex].quantity > 1) {
                     cart[cartIndex].quantity -= 1;
-                    setCart(cart);
+                    saveCart(cart);
                     loadCartItemsFromStorage();
                     calculateTotals();
                     bindQuantityControls();
+                    bindRemoveButtons();
                     animateButton(this);
                 }
             });
@@ -141,14 +140,13 @@ document.addEventListener('DOMContentLoaded', function() {
             input.addEventListener('change', function() {
                 const cartIndex = parseInt(this.getAttribute('data-id'));
                 let value = parseInt(this.value);
-                const cart = getCart();
+                const cart = typeof getCart === 'function' ? getCart() : JSON.parse(localStorage.getItem('cart') || '[]');
                 
                 if (!cart[cartIndex]) return;
                 
                 const min = 1;
                 const max = 99;
                 
-                // Validate input
                 if (isNaN(value) || value < min) {
                     value = min;
                 } else if (value > max) {
@@ -156,13 +154,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 
                 cart[cartIndex].quantity = value;
-                setCart(cart);
+                saveCart(cart);
                 loadCartItemsFromStorage();
                 calculateTotals();
                 bindQuantityControls();
+                bindRemoveButtons();
             });
 
-            // Prevent non-numeric input
             input.addEventListener('keypress', function(e) {
                 if (e.key < '0' || e.key > '9') {
                     e.preventDefault();
@@ -171,7 +169,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Bind controls after loading cart
     bindQuantityControls();
 
     // ========================================
@@ -184,21 +181,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 const cartIndex = parseInt(this.getAttribute('data-id'));
                 const item = document.querySelector(`.cart-item[data-id="${cartIndex}"]`);
                 
-                // Animate removal
-                item.style.opacity = '0';
-                item.style.transform = 'translateX(-20px)';
+                if (item) {
+                    item.style.opacity = '0';
+                    item.style.transform = 'translateX(-20px)';
+                }
                 
                 setTimeout(() => {
-                    // Remove from localStorage
-                    const cart = getCart();
+                    const cart = typeof getCart === 'function' ? getCart() : JSON.parse(localStorage.getItem('cart') || '[]');
                     cart.splice(cartIndex, 1);
-                    setCart(cart);
+                    saveCart(cart);
                     
-                    // Reload cart display
                     loadCartItemsFromStorage();
                     calculateTotals();
                     
-                    // Re-bind event listeners
                     bindQuantityControls();
                     bindRemoveButtons();
                 }, 300);
@@ -206,7 +201,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Bind remove buttons after loading cart
     bindRemoveButtons();
 
     // ========================================
@@ -214,107 +208,118 @@ document.addEventListener('DOMContentLoaded', function() {
     // ========================================
     function showEmptyCart() {
         const cartItems = document.getElementById('cartItems');
-        cartItems.innerHTML = `
-            <div style="text-align: center; padding: 60px 20px;">
-                <i class="fas fa-shopping-bag" style="font-size: 4rem; color: #ddd; margin-bottom: 20px;"></i>
-                <h3 style="font-size: 1.5rem; margin-bottom: 10px;">Your cart is empty</h3>
-                <p style="color: #666; margin-bottom: 25px;">Add some items to get started!</p>
-                <a href="Home.html" style="display: inline-block; padding: 12px 30px; background: #000; color: #fff; text-decoration: none; border-radius: 50px; font-weight: 700; transition: all 0.3s ease;">
-                    Continue Shopping
-                </a>
-            </div>
-        `;
+        if (cartItems) {
+            cartItems.innerHTML = `
+                <div style="text-align: center; padding: 60px 20px;">
+                    <i class="fas fa-shopping-bag" style="font-size: 4rem; color: #ddd; margin-bottom: 20px;"></i>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 10px;">Your cart is empty</h3>
+                    <p style="color: #666; margin-bottom: 25px;">Add some items to get started!</p>
+                    <a href="index.html" style="display: inline-block; padding: 12px 30px; background: #000; color: #fff; text-decoration: none; border-radius: 50px; font-weight: 700; transition: all 0.3s ease;">
+                        Continue Shopping
+                    </a>
+                </div>
+            `;
+        }
     }
 
     // ========================================
-    // PAYMENT BUTTON HANDLERS
+    // GOOGLE SHEETS ORDER SUBMISSION HANDLER
     // ========================================
     const checkoutBtn = document.getElementById('checkoutBtn');
-    const applePayBtn = document.querySelector('.apple-pay');
-    const googlePayBtn = document.querySelector('.google-pay');
 
-    checkoutBtn.addEventListener('click', async function(e) {
-        e.preventDefault();
-        
-        // Validate form
-        const form = document.getElementById('customerForm');
-        if (!form.checkValidity()) {
-            form.reportValidity();
-            return;
-        }
-        
-        // Get form data
-        const formData = {
-            fullName: document.getElementById('fullName').value,
-            phone: document.getElementById('phone').value,
-            email: document.getElementById('email').value,
-            address: document.getElementById('address').value,
-            notes: document.getElementById('notes').value
-        };
-        
-        // Show loading state
-        const originalText = this.innerHTML;
-        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-        this.disabled = true;
-        const btnRef = this;
-
-        // Save order details locally so we can show/confirm them after redirect back from Yoco
-        const totalRands = parseFloat(document.getElementById('totalValue').textContent);
-        const amountInCents = Math.round(totalRands * 100);
-
-        try {
-            // Store pending order info for the success page to use later
-            sessionStorage.setItem('pendingOrder', JSON.stringify({
-                customer: formData,
-                items: getCartData(),
-                totals: {
-                    subtotal: document.getElementById('subtotalValue').textContent,
-                    delivery: document.getElementById('deliveryFee').textContent,
-                    vat: document.getElementById('vatValue').textContent,
-                    total: document.getElementById('totalValue').textContent
-                }
-            }));
-
-            const response = await fetch('/api/create-checkout',  {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ amount: amountInCents })
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.error || 'Failed to create checkout');
+    if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', async function(e) {
+            e.preventDefault();
+            
+            // Validate form requirements
+            const form = document.getElementById('customerForm');
+            if (form && !form.checkValidity()) {
+                form.reportValidity();
+                return;
             }
 
-            // Yoco returns a redirectUrl to their hosted payment page
-            if (data.redirectUrl) {
-                // Don't clear the cart yet — only clear it once payment succeeds
-                // (ideally confirmed via a webhook or on the success page)
-                window.location.assign(data.redirectUrl);
-            } else {
-                throw new Error('No redirect URL returned from payment server');
+            // Ensure cart is not empty
+            const cartItems = getCartData();
+            if (!cartItems || cartItems.length === 0) {
+                alert('Your cart is empty. Please add items before placing an order.');
+                return;
             }
+            
+            // UI Loading state
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Order...';
+            this.disabled = true;
 
-        } catch (error) {
-            console.error('Checkout error:', error);
-            alert('Something went wrong starting your payment. Please try again.\n\n' + error.message);
+            // Extract form inputs safely
+            const fullNameEl = document.getElementById('fullName');
+            const phoneEl = document.getElementById('phone');
+            const emailEl = document.getElementById('email');
+            const notesEl = document.getElementById('notes');
 
-            // Reset button so the user can retry
-            btnRef.innerHTML = originalText;
-            btnRef.disabled = false;
+            const subtotalEl = document.getElementById('subtotalValue');
+            const deliveryEl = document.getElementById('deliveryFee');
+            const vatEl = document.getElementById('vatValue');
+            const totalEl = document.getElementById('totalValue');
+
+            // Construct payload for Google Apps Script
+            const payload = {
+                fullName: fullNameEl ? fullNameEl.value : '',
+                phoneNumber: phoneEl ? phoneEl.value : '',
+                emailAddress: emailEl ? emailEl.value : '',
+                deliveryAddress: "In-Store Collection",
+                notes: notesEl ? notesEl.value : '',
+                cartItems: cartItems,
+                subtotal: subtotalEl ? "R" + subtotalEl.textContent : '',
+                deliveryFee: deliveryEl ? "R" + deliveryEl.textContent : 'R50.00',
+                vat: vatEl ? "R" + vatEl.textContent : '',
+                total: totalEl ? "R" + totalEl.textContent : ''
+            };
+
+            try {
+                // Post payload to Google Apps Script
+                await fetch(GOOGLE_SHEET_WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                // Clear cart locally
+                saveCart([]);
+
+                // Reset form and show empty cart state
+                if (form) form.reset();
+                showEmptyCart();
+                calculateTotals();
+
+                // Advisory notification to client
+                alert(
+                    "Order Placed Successfully!\n\n" +
+                    "• An email notification has been sent to our team.\n" +
+                    "• Please note: Orders are for in-store collection.\n" +
+                    "• Our team will contact you as soon as possible to coordinate your pickup."
+                );
+
+            } catch (error) {
+                console.error('Order submission error:', error);
+                alert('There was an issue submitting your order. Please try again.');
+            } finally {
+                this.innerHTML = originalText;
+                this.disabled = false;
+            }
+        });
+    }
+
+    // Helper function to safely update local cart state
+    function saveCart(cartData) {
+        if (typeof setCart === 'function') {
+            setCart(cartData);
+        } else {
+            localStorage.setItem('cart', JSON.stringify(cartData));
         }
-    });
-
-    applePayBtn.addEventListener('click', function() {
-        alert('Apple Pay integration coming soon! 🍎\n\nPlease use the standard checkout for now.');
-    });
-
-    googlePayBtn.addEventListener('click', function() {
-        alert('Google Pay integration coming soon! 📱\n\nPlease use the standard checkout for now.');
-    });
+    }
 
     // ========================================
     // UTILITY FUNCTIONS
@@ -334,11 +339,11 @@ document.addEventListener('DOMContentLoaded', function() {
         cartItems.forEach(item => {
             items.push({
                 id: item.getAttribute('data-id'),
-                name: item.querySelector('.item-name').textContent,
-                variation: item.querySelector('.item-variation').textContent,
-                price: parseFloat(item.getAttribute('data-price')),
-                quantity: parseInt(item.querySelector('.qty-input').value),
-                total: parseFloat(item.querySelector('.item-total').textContent)
+                name: item.querySelector('.item-name') ? item.querySelector('.item-name').textContent.trim() : '',
+                variation: item.querySelector('.item-variation') ? item.querySelector('.item-variation').textContent.trim() : '',
+                price: parseFloat(item.getAttribute('data-price')) || 0,
+                quantity: item.querySelector('.qty-input') ? parseInt(item.querySelector('.qty-input').value) || 1 : 1,
+                total: item.querySelector('.item-total') ? parseFloat(item.querySelector('.item-total').textContent) || 0 : 0
             });
         });
         
@@ -349,36 +354,35 @@ document.addEventListener('DOMContentLoaded', function() {
     // FORM ENHANCEMENTS
     // ========================================
     
-    // Auto-format phone number
     const phoneInput = document.getElementById('phone');
-    phoneInput.addEventListener('input', function(e) {
-        let value = this.value.replace(/\D/g, '');
-        
-        // Format as +27 XX XXX XXXX
-        if (value.startsWith('27')) {
-            value = value.substring(2);
-        } else if (value.startsWith('0')) {
-            value = value.substring(1);
-        }
-        
-        if (value.length > 0) {
-            let formatted = '+27 ';
-            if (value.length > 0) formatted += value.substring(0, 2);
-            if (value.length > 2) formatted += ' ' + value.substring(2, 5);
-            if (value.length > 5) formatted += ' ' + value.substring(5, 9);
-            this.value = formatted.trim();
-        }
-    });
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
+            let value = this.value.replace(/\D/g, '');
+            
+            if (value.startsWith('27')) {
+                value = value.substring(2);
+            } else if (value.startsWith('0')) {
+                value = value.substring(1);
+            }
+            
+            if (value.length > 0) {
+                let formatted = '+27 ';
+                if (value.length > 0) formatted += value.substring(0, 2);
+                if (value.length > 2) formatted += ' ' + value.substring(2, 5);
+                if (value.length > 5) formatted += ' ' + value.substring(5, 9);
+                this.value = formatted.trim();
+            }
+        });
+    }
 
-    // Form input animations
     const formInputs = document.querySelectorAll('.form-group input, .form-group textarea');
     formInputs.forEach(input => {
         input.addEventListener('focus', function() {
-            this.parentElement.style.transform = 'translateY(-2px)';
+            if (this.parentElement) this.parentElement.style.transform = 'translateY(-2px)';
         });
         
         input.addEventListener('blur', function() {
-            this.parentElement.style.transform = 'translateY(0)';
+            if (this.parentElement) this.parentElement.style.transform = 'translateY(0)';
         });
     });
 
@@ -400,7 +404,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, observerOptions);
 
-    // Observe sections
     document.querySelectorAll('.cart-section, .customer-section').forEach(section => {
         section.style.opacity = '0';
         section.style.transform = 'translateY(30px)';
@@ -408,20 +411,11 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(section);
     });
 
-    // ========================================
-    // INITIALIZE
-    // ========================================
-    
     // Calculate initial totals
     calculateTotals();
-    
-    console.log('Checkout page loaded successfully!');
-    console.log('Cart items:', getCartData().length);
 });
 
-// ========================================
-// PREVENT ACCIDENTAL PAGE REFRESH
-// ========================================
+// Prevent accidental refresh if cart is populated
 window.addEventListener('beforeunload', function(e) {
     const cartItems = document.querySelectorAll('.cart-item');
     if (cartItems.length > 0) {

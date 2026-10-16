@@ -307,9 +307,9 @@ body {
 }
 
 .title-script {
-    font-family: 'Brush Script MT', cursive;
+    font-family: 'UnifrakturCook', 'Impact', 'Arial Black', sans-serif;
     font-weight: 400;
-    font-style: italic;
+    /* font-style: italic; */
     margin-right: 10px;
 }
 
