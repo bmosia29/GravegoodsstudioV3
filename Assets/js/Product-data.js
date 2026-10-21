@@ -673,5 +673,321 @@ const products = [
   "category": "Nipple",
   "description": "Double ring shield nipple jewellery with straight bar.",
   "stock": 5
-}
+},
+{
+    "id": "1-2-x-6-x-3-labret-gold",
+    "name": "1.2 X 6 X 3 Labret – Gold",
+    "price": 60.00,
+    "images": ["images/Gold flatback/1.2 X 6 X 3 LABRET – GOLD R50.00.png"],
+    "category": "Labret",
+    "description": "Gold labret piercing jewellery, 1.2 x 6 x 3.",
+    "stock": 5
+},
+{
+    "id": "1-2-x-6-x-3-labret-gold-surgical-steel-pvd",
+    "name": "1.2 X 6 X 3 Labret – Gold Surgical Steel (PVD)",
+    "price": 80.00,
+    "images": ["images/Gold flatback/1.2 X 6 X 3 LABRET – GOLD SURGICAL STEEL (PVD) R80.00.png"],
+    "category": "Labret",
+    "description": "Gold PVD surgical steel labret, 1.2 x 6 x 3.",
+    "stock": 5
+},
+{
+    "id": "1-2-x-8-x-2-labret-steel-jewelled-flat-top",
+    "name": "1.2 X 8 X 2 Labret – Steel – Jewelled (Flat Top)",
+    "price": 110.00,
+    "images": ["images/Gold flatback/1.2 X 8 X 2 LABRET – STEEL – JEWELLED (FLAT TOP) R110.00.png"],
+    "category": "Labret",
+    "description": "Steel labret with a jewelled flat top, 1.2 x 8 x 2.",
+    "stock": 5
+},
+{
+    "id": "1-2-x-8-x-3-labret-gold",
+    "name": "1.2 X 8 X 3 Labret – Gold",
+    "price": 60.00,
+    "images": ["images/Gold flatback/1.2 X 8 X 3 LABRET – GOLD R50.00.png"],
+    "category": "Labret",
+    "description": "Gold labret piercing jewellery, 1.2 x 8 x 3.",
+    "stock": 5
+},
+{
+    "id": "1-2-x-8-x-3-labret-gold-surgical-steel-pvd",
+    "name": "1.2 X 8 X 3 Labret – Gold Surgical Steel (PVD)",
+    "price": 80.00,
+    "images": ["images/Gold flatback/1.2 X 8 X 3 LABRET – GOLD SURGICAL STEEL (PVD) R80.00.png"],
+    "category": "Labret",
+    "description": "Gold PVD surgical steel labret, 1.2 x 8 x 3.",
+    "stock": 5
+},
+{
+    "id": "1-2-x-8-x-3-labret-gold-jewelled",
+    "name": "1.2 X 8 X 3 Labret – Gold – Jewelled",
+    "price": 95.00,
+    "images": ["images/Gold flatback/1.2 X 8 X 3 LABRET – GOLD – JEWELLED R95.png"],
+    "category": "Labret",
+    "description": "Gold labret with jewelled detailing, 1.2 x 8 x 3.",
+    "stock": 5
+},
+{
+    "id": "1-2-x-8-x-3-labret-gold-prong-set-cubic-zirconia-internal-thread",
+    "name": "1.2 X 8 X 3 Labret – Gold – Prong Set Cubic Zirconia (Internal Thread)",
+    "price": 180.00,
+    "images": ["images/Gold flatback/1.2 X 8 X 3 LABRET – GOLD – PRONG SET CUBIC ZIRCONIA SURGICAL STEEL (INTERNAL THREAD) R180.png"],
+    "category": "Labret",
+    "description": "Gold surgical steel labret with prong-set cubic zirconia and an internal thread.",
+    "stock": 5
+},
+{
+    "id": "1-2-x-8-x-3-labret-stainless-steel-jewelled",
+    "name": "1.2 X 8 X 3 Labret – Stainless Steel – Jewelled",
+    "price": 60.00,
+    "images": ["images/Gold flatback/1.2 X 8 X 3 LABRET – STAINLESS STEEL – JEWELLED R50.png"],
+    "category": "Labret",
+    "description": "Jewelled stainless steel labret, 1.2 x 8 x 3.",
+    "stock": 5
+},
+{
+    "id": "1-2-x-8-x-4-labret-titanium-gold-pvd-cz-crystal-flower",
+    "name": "1.2 X 8 X 4 Labret – Titanium – Gold (PVD) – CZ Crystal Flower Top (Internal Threaded)",
+    "price": 320.00,
+    "images": ["images/Gold flatback/1.2 X 8 X 4 LABRET – TITANIUM – GOLD (PVD) – CZ CRYSTAL FLOWER TOP (INTERNAL THREADED) R320.00.png"],
+    "category": "Labret",
+    "description": "Gold PVD titanium labret with a cubic zirconia crystal flower top and internal threading.",
+    "stock": 5
+},
+{
+    "id": "1-2-x-8-x-8-labret-gold-crystal-butterfly-internal-thread",
+    "name": "1.2 X 8 X 8 Labret – Gold – Crystal Butterfly (Internal Thread)",
+    "price": 200.00,
+    "images": ["images/Gold flatback/1.2 X 8 X 8 LABRET – GOLD – CRYSTAL BUTTERFLY (INTERNAL THREAD) R200.00.png"],
+    "category": "Labret",
+    "description": "Gold labret with a crystal butterfly design and internal threading.",
+    "stock": 5
+},
+{
+    id: "silver-labret-1-2x6x7-steel-4-jewels-internal-thread",
+    name: "1.2 X 6 X 7 LABRET – STEEL – 4 JEWELS (INTERNAL THREAD)",
+    price: 121.00,
+    images: ["images/Silver Fatback/1.2 X 6 X 7 LABRET – STEEL – 4 JEWELS (INTERNAL THREAD) R121.000.png"],
+    category: "Labret",
+    description: "Steel labret with 4 jewels and an internal thread.",
+    stock: 5
+},
+{
+    id: "silver-labret-1-2x8x11-gold-eye-black-jewelled",
+    name: "1.2 X 8 X 11 LABRET – GOLD – EYE (BLACK JEWELLED)",
+    price: 138.00,
+    images: ["images/Silver Fatback/1.2 X 8 X 11 LABRET – GOLD – EYE (BLACK JEWELLED) R138.00.png"],
+    category: "Labret",
+    description: "Gold labret featuring a black jewelled eye design.",
+    stock: 5
+},
+{
+    id: "silver-labret-1-2x8x11-gold-eye-clear",
+    name: "1.2 X 8 X 11 LABRET – GOLD – EYE – CLEAR",
+    price: 138.00,
+    images: ["images/Silver Fatback/1.2 X 8 X 11 LABRET – GOLD – EYE – CLEAR R138.00.png"],
+    category: "Labret",
+    description: "Gold labret featuring a clear eye design.",
+    stock: 5
+},
+{
+    id: "silver-labret-1-2x8x11-stainless-steel-snake",
+    name: "1.2 X 8 X 11 LABRET – STAINLESS STEEL – SNAKE (INTERNAL THREAD)",
+    price: 120.00,
+    images: ["images/Silver Fatback/1.2 X 8 X 11 LABRET – STAINLESS STEEL – SNAKE (INTERNAL THREAD) R120.00.png"],
+    category: "Labret",
+    description: "Stainless steel labret with a snake design and internal thread.",
+    stock: 5
+},
+{
+    id: "silver-labret-1-2x8x11-steel-eye-jewelled",
+    name: "1.2 X 8 X 11 LABRET – STEEL – EYE (JEWELLED)",
+    price: 138.00,
+    images: ["images/Silver Fatback/1.2 X 8 X 11 LABRET – STEEL – EYE (JEWELLED) R138.00.png"],
+    category: "Labret",
+    description: "Steel labret featuring a jewelled eye design.",
+    stock: 5
+},
+{
+    id: "silver-labret-1-2x8x12-steel-crystal-vine",
+    name: "1.2 X 8 X 12 LABRET – STEEL – CRYSTAL VINE (INTERNAL THREAD)",
+    price: 207.00,
+    images: ["images/Silver Fatback/1.2 X 8 X 12 LABRET – STEEL – CRYSTAL VINE (INTERNAL THREAD) R207.00.png"],
+    category: "Labret",
+    description: "Steel labret with a crystal vine design and internal thread.",
+    stock: 5
+},
+{
+    id: "silver-labret-1-2x8x12-steel-ily-hand",
+    name: "1.2 X 8 X 12 LABRET – STEEL – ILY HAND (INTERNAL THREAD)",
+    price: 232.00,
+    images: ["images/Silver Fatback/1.2 X 8 X 12 LABRET – STEEL – ILY HAND (INTERNAL THREAD) R232.00.png"],
+    category: "Labret",
+    description: "Steel labret featuring an ILY hand design and internal thread.",
+    stock: 5
+},
+{
+    id: "silver-labret-1-2x8x16-steel-3-jewels-beads",
+    name: "1.2 X 8 X 16 LABRET – STEEL – 3 JEWELS & BEADS (INTERNAL THREAD)",
+    price: 120.00,
+    images: ["images/Silver Fatback/1.2 X 8 X 16 LABRET – STEEL – 3 JEWELS & BEADS (INTERNAL THREAD) R120.00.png"],
+    category: "Labret",
+    description: "Steel labret with 3 jewels and beads and an internal thread.",
+    stock: 5
+},
+{
+    id: "silver-labret-1-2x8x20-steel-5-jewels-beads",
+    name: "1.2 X 8 X 20 LABRET – STEEL – 5 JEWELS & BEADS (INTERNAL THREAD)",
+    price: 161.00,
+    images: ["images/Silver Fatback/1.2 X 8 X 20 LABRET – STEEL – 5 JEWELS & BEADS (INTERNAL THREAD) R161.00.png"],
+    category: "Labret",
+    description: "Steel labret with 5 jewels and beads and an internal thread.",
+    stock: 5
+},
+{
+    id: "silver-labret-1-2x8x3-prong-set-cubic-zirconia-internal-thread",
+    name: "1.2 X 8 X 3 LABRET – PRONG SET CUBIC ZIRCONIA (INTERNAL THREAD)",
+    price: 120.00,
+    images: ["images/Silver Fatback/1.2 X 8 X 3 LABRET – PRONG SET CUBIC ZIRCONIA (INTERNAL THREAD) R120.00.png"],
+    category: "Labret",
+    description: "Labret with prong-set cubic zirconia and an internal thread.",
+    stock: 5
+},
+{
+    id: "silver-labret-1-2x8x3-prong-set-cubic-zirconia-push-pin",
+    name: "1.2 X 8 X 3 LABRET – PRONG SET CUBIC ZIRCONIA (PUSH PIN)",
+    price: 120.00,
+    images: ["images/Silver Fatback/1.2 X 8 X 3 LABRET – PRONG SET CUBIC ZIRCONIA (PUSH PIN) R120.00.png"],
+    category: "Labret",
+    description: "Labret with prong-set cubic zirconia and a push-pin fitting.",
+    stock: 5
+},
+{
+    id: "silver-labret-1-2x8x4-steel-flower",
+    name: "1.2 X 8 X 4 LABRET – STEEL – FLOWER (INTERNAL THREAD)",
+    price: 92.00,
+    images: ["images/Silver Fatback/1.2 X 8 X 4 LABRET – STEEL – FLOWER (INTERNAL THREAD) R92.00.png"],
+    category: "Labret",
+    description: "Steel labret with a flower design and internal thread.",
+    stock: 5
+},
+{
+    id: "silver-labret-1-2x8x4-steel-heart",
+    name: "1.2 X 8 X 4 LABRET – STEEL – HEART (INTERNAL THREAD)",
+    price: 92.00,
+    images: ["images/Silver Fatback/1.2 X 8 X 4 LABRET – STEEL – HEART (INTERNAL THREAD) R92.00.png"],
+    category: "Labret",
+    description: "Steel labret with a heart design and internal thread.",
+    stock: 5
+},
+{
+    id: "silver-labret-1-2x8x4-surgical-steel-jewelled-dangle-star",
+    name: "1.2 X 8 X 4 LABRET – SURGICAL STEEL – JEWELLED -DANGLE STEEL STAR",
+    price: 92.00,
+    images: ["images/Silver Fatback/1.2 X 8 X 4 LABRET – SURGICAL STEEL – JEWELLED -DANGLE STEEL  STAR R92.00.png"],
+    category: "Labret",
+    description: "Surgical steel labret with a jewelled dangling steel star.",
+    stock: 5
+},
+{
+    id: "silver-labret-1-2x8x5-steel-clover",
+    name: "1.2 X 8 X 5 LABRET – STEEL – CLOVER (INTERNAL THREAD)",
+    price: 152.00,
+    images: ["images/Silver Fatback/1.2 X 8 X 5 LABRET – STEEL – CLOVER (INTERNAL THREAD) R152.00.png"],
+    category: "Labret",
+    description: "Steel labret with a clover design and internal thread.",
+    stock: 5
+},
+{
+    id: "silver-labret-1-2x8x5-steel-crystal-flower",
+    name: "1.2 X 8 X 5 LABRET – STEEL – CRYSTAL FLOWER",
+    price: 201.00,
+    images: ["images/Silver Fatback/1.2 X 8 X 5 LABRET – STEEL – CRYSTAL FLOWER R201.00.png"],
+    category: "Labret",
+    description: "Steel labret featuring a crystal flower design.",
+    stock: 5
+},
+{
+    id: "silver-labret-1-2x8x5-steel-heart-jewelled",
+    name: "1.2 X 8 X 5 LABRET – STEEL – HEART (JEWELLED)",
+    price: 138.00,
+    images: ["images/Silver Fatback/1.2 X 8 X 5 LABRET – STEEL – HEART (JEWELLED) R138.00.png"],
+    category: "Labret",
+    description: "Steel labret with a jewelled heart design.",
+    stock: 5
+},
+{
+    id: "silver-labret-1-2x8x6-steel-aquamarine-beaded",
+    name: "1.2 X 8 X 6 LABRET – STEEL – AQUAMARINE BEADED (INTERNAL THREAD)",
+    price: 177.00,
+    images: ["images/Silver Fatback/1.2 X 8 X 6 LABRET – STEEL – AQUAMARINE BEADED (INTERNAL THREAD) R177.00.png"],
+    category: "Labret",
+    description: "Steel labret with aquamarine beads and an internal thread.",
+    stock: 5
+},
+{
+    id: "silver-labret-1-2x8x6-steel-cross",
+    name: "1.2 X 8 X 6 LABRET – STEEL – CROSS (INTERNAL THREAD)",
+    price: 69.00,
+    images: ["images/Silver Fatback/1.2 X 8 X 6 LABRET – STEEL – CROSS (INTERNAL THREAD) R69.00.png"],
+    category: "Labret",
+    description: "Steel labret with a cross design and internal thread.",
+    stock: 5
+},
+{
+    id: "silver-labret-1-2x8x6-steel-opal-beaded-138",
+    name: "1.2 X 8 X 6 LABRET – STEEL – OPAL BEADED (INTERNAL THREAD)",
+    price: 138.00,
+    images: ["images/Silver Fatback/1.2 X 8 X 6 LABRET – STEEL – OPAL BEADED (INTERNAL THREAD) R138.00.png"],
+    category: "Labret",
+    description: "Steel labret with opal beads and an internal thread.",
+    stock: 5
+},
+{
+    id: "silver-labret-1-2x8x6-steel-opal-beaded-173",
+    name: "1.2 X 8 X 6 LABRET – STEEL – OPAL BEADED (INTERNAL THREAD)",
+    price: 173.00,
+    images: ["images/Silver Fatback/1.2 X 8 X 6 LABRET – STEEL – OPAL BEADED (INTERNAL THREAD) R173.00.png"],
+    category: "Labret",
+    description: "Steel labret with opal beads and an internal thread.",
+    stock: 5
+},
+{
+    id: "silver-labret-1-2x8x7-steel-2-jewels",
+    name: "1.2 X 8 X 7 LABRET – STEEL – 2 JEWELS (INTERNAL THREAD)",
+    price: 121.00,
+    images: ["images/Silver Fatback/1.2 X 8 X 7 LABRET – STEEL – 2 JEWELS (INTERNAL THREAD) R121.00.png"],
+    category: "Labret",
+    description: "Steel labret with 2 jewels and an internal thread.",
+    stock: 5
+},
+{
+    id: "silver-labret-1-2x8x8-steel-crystal-butterfly",
+    name: "1.2 X 8 X 8 LABRET – STEEL – CRYSTAL BUTTERFLY (INTERNAL THREAD)",
+    price: 207.00,
+    images: ["images/Silver Fatback/1.2 X 8 X 8 LABRET – STEEL – CRYSTAL BUTTERFLY (INTERNAL THREAD) R207.00.png"],
+    category: "Labret",
+    description: "Steel labret with a crystal butterfly design and internal thread.",
+    stock: 5
+},
+{
+    id: "silver-labret-1-2x8x9-steel-dagger",
+    name: "1.2 X 8 X 9 LABRET – STEEL – DAGGER (INTERNAL THREAD)",
+    price: 92.50,
+    images: ["images/Silver Fatback/1.2 X 8 X 9 LABRET – STEEL – DAGGER (INTERNAL THREAD) R92.50.png"],
+    category: "Labret",
+    description: "Steel labret with a dagger design and internal thread.",
+    stock: 5
+},
+{
+    id: "silver-labret-1-6x12x41-steel-long-curved-spike",
+    name: "1.6 X 12 X 41 LABRET -STEEL -LONG CURVED SPIKE",
+    price: 345.00,
+    images: ["images/Silver Fatback/1.6 X 12 X 41 LABRET -STEEL -LONG CURVED SPIKE R345.00.png"],
+    category: "Labret",
+    description: "Steel labret featuring a long curved spike.",
+    stock: 5
+},
+
 ];
