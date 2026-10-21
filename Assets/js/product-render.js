@@ -1,3 +1,4 @@
+
 // ========================================
 // PRODUCT RENDERING (listing page)
 // Reads the `products` array from Product-data.js
@@ -8,11 +9,18 @@ const container = document.getElementById("productContainer");
 
 /**
  * Normalize a category string into a lowercase, dash-safe key
- * so it matches the filter dropdown values in search.js
- * (e.g. "Barbell" -> "barbell", "Nose" -> "nose")
+ * and automatically map labrets, flatbacks, and ear items.
  */
-function normalizeCategory(category) {
-    return (category || "general").toString().trim().toLowerCase();
+function normalizeCategory(category, productName = '') {
+    const cat = (category || "general").toString().trim().toLowerCase();
+    const name = (productName || "").toString().trim().toLowerCase();
+
+    // Automatically classify labrets, flatbacks, or ear items as 'ear' jewellery
+    if (cat.includes('labret') || cat === 'flatback' || name.includes('ear') || name.includes('flatback') || name.includes('labret')) {
+        return 'ear';
+    }
+
+    return cat;
 }
 
 function renderProducts(productArray) {
@@ -25,15 +33,18 @@ function renderProducts(productArray) {
 
     productArray.forEach(product => {
         // Defensive fallbacks so a missing field never crashes the whole grid
-        const image = (product.images && product.images[0]) || product.image || 'Assets/images/placeholder.jpg';
+        const image = (product.images && product.images[0]) || product.image || 'Assets/images/image.jpeg';
         const materials = Array.isArray(product.materials) ? product.materials : [];
-        const category = normalizeCategory(product.category);
+        const category = normalizeCategory(product.category, product.name);
+        
+        // Combine text for filtering support
+        const searchableText = `${product.name} ${product.description || ''} ${product.category || ''}`.toLowerCase();
 
         container.innerHTML += `
         <a href="product-detail.html?id=${product.id}"
            class="product-link"
            data-category="${category}"
-           data-materials="${materials.join(' ')}">
+           data-materials="${searchableText}">
 
             <div class="product-card">
                 <img src="${image}" alt="${product.name}" loading="lazy">
