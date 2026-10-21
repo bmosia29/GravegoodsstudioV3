@@ -4,49 +4,48 @@
  */
 
 const CART_KEY = 'graveyard_cart_v1';
-const PRODUCTS_URL = 'Assets/Products.json';
 
-// Cache for products to avoid repeated fetches
+// Cache for products to avoid repeated checks
 let productsCache = null;
 
 /**
- * Load products from JSON with caching
+ * Load products directly from the global `products` array (Product-data.js)
  */
 async function loadProducts() {
     if (productsCache) return productsCache;
     
-    try {
-        const response = await fetch(PRODUCTS_URL);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const data = await response.json();
-        productsCache = data.products || [];
+    if (typeof products !== 'undefined' && Array.isArray(products)) {
+        productsCache = products;
         return productsCache;
-    } catch (error) {
-        console.error('❌ Error loading products:', error);
-        showToast('Failed to load products. Please refresh the page.', 'error');
-        return [];
     }
+    
+    console.error('❌ `products` array not found. Ensure Product-data.js is loaded before store.js');
+    return [];
 }
 
 /**
- * Get product by slug
+ * Get product by slug or ID
  */
 async function getProductBySlug(slug) {
-    const products = await loadProducts();
-    if (!products) return null;
-    return products.find(p => 
-        (p.slug === slug) || 
-        (p.id === slug) || 
-        ((p.name || '').toLowerCase().replace(/\s+/g, '-') === slug)
-    );
+    const allProducts = await loadProducts();
+    if (!allProducts || !allProducts.length) return null;
+
+    const normalizedSlug = String(slug).trim().toLowerCase();
+
+    return allProducts.find(p => {
+        const pId = String(p.id || '').trim().toLowerCase();
+        const pSlug = String(p.slug || '').trim().toLowerCase();
+        const pNameSlug = String(p.name || '').trim().toLowerCase().replace(/\s+/g, '-');
+        
+        return pId === normalizedSlug || pSlug === normalizedSlug || pNameSlug === normalizedSlug;
+    }) || null;
 }
 
 /**
  * Get product by ID
  */
 async function getProductById(id) {
-    const products = await loadProducts();
-    return products.find(p => p.id === id) || null;
+    return getProductBySlug(id);
 }
 
 /**
@@ -176,7 +175,7 @@ function formatPrice(price, currency = 'ZAR') {
  */
 function validateCartItem(item) {
     if (!item.productId) return { valid: false, error: 'Invalid product' };
-    // If the product defines colours or measurements, require them. Otherwise allow missing variants.
+    
     let product = null;
     if (productsCache && Array.isArray(productsCache)) {
         product = productsCache.find(p => p.id === item.productId || p.slug === item.slug || p.id === item.slug) || null;
@@ -197,7 +196,6 @@ function validateCartItem(item) {
  * Show toast notification
  */
 function showToast(message, type = 'success') {
-    // Create toast if doesn't exist
     let toast = document.getElementById('toast');
     if (!toast) {
         toast = document.createElement('div');
@@ -256,116 +254,40 @@ if (typeof window !== 'undefined') {
 }
 
 async function checkoutWithYoco() {
-
     try {
-
         const subtotal = getCartSubtotal();
 
         if (subtotal <= 0) {
             showToast("Your cart is empty.", "error");
             return;
-        }
-
-        const response = await fetch("http://localhost:3000/create-checkout", {
-
-            method: "POST",
-
-            headers: {
-                "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
-
-                // Yoco expects cents
-                amount: Math.round(subtotal * 100)
-
-            })
-
-        });
-
-        const data = await response.json();
-
-        console.log(data);
-
-        // We'll update this once we confirm the response format
-        if (data.redirectUrl) {
-
-            window.location.href = data.redirectUrl;
-
-        } else {
-
-            console.error(data);
-            showToast("Unable to start checkout.", "error");
-
-        }
-
-    } catch (err) {
-
-        console.error(err);
-
-        showToast("Payment error.", "error");
-
-    }
-
-}
-
-async function checkoutWithYoco() {
-
-    try {
-
-        const subtotal = getCartSubtotal();
-
-        if (subtotal <= 0) {
-
-            showToast("Your cart is empty.", "error");
-            return;
-
         }
 
         const response = await fetch(
             "http://localhost:3000/create-checkout",
             {
                 method: "POST",
-
                 headers: {
                     "Content-Type": "application/json"
                 },
-
                 body: JSON.stringify({
-
                     amount: Math.round(subtotal * 100)
-
                 })
-
             }
         );
 
         const data = await response.json();
 
-        console.log(data);
-
         if (data.redirectUrl) {
-
             window.location.href = data.redirectUrl;
-
         } else if (data.redirect_url) {
-
             window.location.href = data.redirect_url;
-
         } else {
-
             console.log(data);
-
             showToast("Unable to create checkout.", "error");
-
         }
 
     } catch (error) {
-
         console.error(error);
-
         showToast("Payment failed.", "error");
-
     }
-
 }
