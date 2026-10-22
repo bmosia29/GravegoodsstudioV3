@@ -215,23 +215,15 @@ const products = [
   "description": "Classic 1.6 x 10 x 5.5 belly bar slave ring.",
   "stock": 5
 },
+
 {
-  "id": "1-6-x-10-x-5-5-belly-bar-steel-iridescent",
-  "name": "1.6 X 10 X 5/5 Belly Bar | Steel Iridescent",
-  "price": 120,
-  "images": ["Assets/images/Belly-Piecing-image.png"],
-  "category": "Belly",
-  "description": "1.6 x 10 x 5.5 belly bar made from surgical steel with an iridescent finish. Durable and comfortable for everyday wear.",
-  "stock": 5
-},
-{
-  "id": "1-6-x-10-x-5-8-belly-bar-steel-black-double-jewelled",
-  "name": "1.6 X 10 X 5/8 Belly Bar | Steel | Black Double Jewelled",
-  "price": 100,
-  "images": ["Assets/images/Belly-Piecing-image.png"],
-  "category": "Belly",
-  "description": "Steel belly bar with black double jewelled detailing.",
-  "stock": 5
+    id: "belly-bar-1-6x10x5-8-steel-black-double-jewelled",
+    name: "1.6 X 10 X 5/8 BELLY BAR – STEEL – BLACK DOUBLE JEWELLED",
+    price: 100,
+    images: ["images/1.6 X 10 X 5_8 – BELLY BAR – STEEL – BLACK DOUBLE JEWELLED.png"],
+    category: "Belly",
+    description: "Steel belly bar with a black double-jewelled design.",
+    stock: 5
 },
 {
   "id": "1-6-x-10-x-5-8-belly-bar-steel-fuchsia",
